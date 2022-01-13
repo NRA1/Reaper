@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1920"
+   height="1080"
+   viewBox="0 0 1920 1080"
+   version="1.1"
+   id="svg5"
+   inkscape:export-filename="/home/nra1/Documents/Projects/Reaper/doc/icon/icon.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="icon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="1.1555556"
+     inkscape:cx="608.79808"
+     inkscape:cy="318.02885"
+     inkscape:window-width="1600"
+     inkscape:window-height="1172"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:#ffffff;stroke:#000000;stroke-width:14.9611;stroke-miterlimit:4;stroke-dasharray:none"
+       id="path3244"
+       cx="790.94012"
+       cy="345.76816"
+       r="180.6678" />
+    <path
+       style="fill:#808080;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 719.42159,201.91662 c 127.0412,-9.74529 160.22662,-0.14865 199.71202,72.53359 l -8.05001,22.54331 -20.78303,-8.78594 C 850.18775,214.10591 719.42159,201.91662 719.42159,201.91662 Z"
+       id="path343"
+       sodipodi:nodetypes="scccs" />
+    <path
+       id="rect999"
+       style="fill:#000000;fill-rule:evenodd"
+       d="m 898.58313,267.45534 7.13592,-15.73687 c 9.4295,12.88961 14.85739,22.4403 14.85739,22.4403 l -91.80369,227.70926 c -17.80226,13.41142 -21.99332,-6.70342 -21.99332,-6.70342 z"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       id="rect6322"
+       style="stroke-width:20.072"
+       d="m 780.148,429.8677 49.00963,21.28172 -8.91239,21.75918 -49.00963,-21.28172 c 0,0 -8.81318,-17.77433 8.91239,-21.75918 z"
+       sodipodi:nodetypes="ccccc" />
+  </g>
+</svg>
