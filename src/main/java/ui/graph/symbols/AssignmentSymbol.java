@@ -31,6 +31,7 @@ public class AssignmentSymbol extends PlacableSymbol {
 
     @Override
     public void paint(QPainter qPainter, QStyleOptionGraphicsItem qStyleOptionGraphicsItem, QWidget qWidget) {
+        SetDefaultQPainterSettings(qPainter);
         QPen pen = new QPen(new QColor(Qt.GlobalColor.green));
         pen.setWidth(3);
         qPainter.setPen(pen);

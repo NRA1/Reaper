@@ -43,6 +43,7 @@ public class InputSymbol extends PlacableSymbol {
 
     @Override
     public void paint(QPainter qPainter, QStyleOptionGraphicsItem qStyleOptionGraphicsItem, QWidget qWidget) {
+        SetDefaultQPainterSettings(qPainter);
         QPen pen = new QPen(new QColor(Qt.GlobalColor.red));
         pen.setWidth(3);
         qPainter.setPen(pen);

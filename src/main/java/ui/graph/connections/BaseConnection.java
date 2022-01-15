@@ -1,5 +1,6 @@
 package ui.graph.connections;
 
+import io.qt.core.QMarginsF;
 import io.qt.core.QPointF;
 import io.qt.core.QRectF;
 import io.qt.core.Qt;
@@ -41,16 +42,20 @@ public class BaseConnection implements QGraphicsItem {
 
     public void setOutSymbol(BaseSymbol outSymbol) {
         this.outSymbol = outSymbol;
+        update();
     }
 
     @Override
     public QRectF boundingRect() {
-        return new QRectF(new QPointF(-10, -10), this.mapFromScene(new QPointF(outSymbol.scenePos().x()
-                + outSymbol.size.width() / 2, outSymbol.scenePos().y())).add(new QPointF(10, 10)));
+        QRectF rect = new QRectF(this.mapFromScene(inSymbol.scenePos()), this.mapFromScene(outSymbol.scenePos()
+                .subtract(new QPointF(0, outSymbol.size.height()))));
+        return new QRectF(0, 0, rect.width(), rect.height()).normalized().marginsAdded(
+                new QMarginsF(10, 10, 10, 10));
     }
 
     @Override
     public void paint(QPainter qPainter, QStyleOptionGraphicsItem qStyleOptionGraphicsItem, QWidget qWidget) {
+        qPainter.setRenderHints(new QPainter.RenderHints(QPainter.RenderHint.Antialiasing, QPainter.RenderHint.TextAntialiasing));
         QPen pen = new QPen(new QColor(Qt.GlobalColor.blue));
         pen.setWidth(5);
         qPainter.setPen(pen);

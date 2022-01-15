@@ -18,6 +18,8 @@ public class BaseSymbol implements QGraphicsItem {
         this.text = text;
         this.setFlags(GraphicsItemFlag.ItemIsMovable, GraphicsItemFlag.ItemIsSelectable,
                 GraphicsItemFlag.ItemSendsGeometryChanges);
+
+        UpdatePosition();
     }
 
     public BaseSymbol() {
@@ -32,7 +34,7 @@ public class BaseSymbol implements QGraphicsItem {
         return value;
     }
 
-    protected void UpdatePosition() {}
+    protected void UpdatePosition() { }
 
     @Override
     public QRectF boundingRect() {
@@ -41,10 +43,15 @@ public class BaseSymbol implements QGraphicsItem {
 
     @Override
     public void paint(QPainter qPainter, QStyleOptionGraphicsItem qStyleOptionGraphicsItem, QWidget qWidget) {
+        SetDefaultQPainterSettings(qPainter);
         QPen pen = new QPen(new QColor(Qt.GlobalColor.black));
         pen.setWidth(3);
         qPainter.setPen(pen);
         qPainter.drawRect(boundingRect());
         qPainter.drawText(boundingRect(), Qt.AlignmentFlag.AlignCenter.value(), text);
+    }
+
+    protected void SetDefaultQPainterSettings(QPainter qPainter) {
+        qPainter.setRenderHints(new QPainter.RenderHints(QPainter.RenderHint.Antialiasing, QPainter.RenderHint.TextAntialiasing));
     }
 }

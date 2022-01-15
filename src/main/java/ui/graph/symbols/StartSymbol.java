@@ -30,6 +30,7 @@ public class StartSymbol extends BaseSymbol {
 
     @Override
     public void paint(QPainter qPainter, QStyleOptionGraphicsItem qStyleOptionGraphicsItem, QWidget qWidget) {
+        SetDefaultQPainterSettings(qPainter);
         QPen pen = new QPen(new QColor(Qt.GlobalColor.darkMagenta));
         pen.setWidth(3);
         qPainter.setPen(pen);
