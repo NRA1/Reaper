@@ -17,6 +17,7 @@ import ui.graph.symbols.connectors.MergeConnector;
 public class Scene extends QGraphicsScene {
 
     private BaseSymbol droppingSymbol;
+    private BaseConnection boldConnection;
 
     public Scene() {
         StartSymbol startSymbol = new StartSymbol(new QPointF(0, -100), new QSizeF(100, 50));
@@ -69,6 +70,21 @@ public class Scene extends QGraphicsScene {
         if (event.mimeData().hasFormat(SymbolEnum.class.getName())) {
             droppingSymbol.setPos(event.scenePos().subtract(new QPointF(droppingSymbol.size.width() / 2,
                     droppingSymbol.size.height() / 2)));
+
+            var connection = findUnderlyingConnection(event.scenePos());
+            if (connection == boldConnection) return;
+            else if (connection == null) {
+                boldConnection.setBold(false);
+                boldConnection = null;
+            } else if (boldConnection == null) {
+                boldConnection = connection;
+                boldConnection.setBold(true);
+            } else {
+                boldConnection.setBold(false);
+                boldConnection = connection;
+                boldConnection.setBold(true);
+            }
+
             return;
         }
         super.dragMoveEvent(event);
@@ -76,6 +92,11 @@ public class Scene extends QGraphicsScene {
 
     @Override
     protected void dropEvent(QGraphicsSceneDragDropEvent event) {
+        if (boldConnection != null) {
+            boldConnection.setBold(false);
+            boldConnection = null;
+        }
+
         if (event.mimeData().hasFormat(SymbolEnum.class.getName())) {
             droppingSymbol.setPos(event.scenePos().subtract(new QPointF(droppingSymbol.size.width() / 2,
                     droppingSymbol.size.height() / 2)));

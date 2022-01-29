@@ -17,6 +17,8 @@ public class BaseConnection implements QGraphicsItem {
     private Connector inConnector;
     private Connector outConnector;
 
+    private boolean isBold = false;
+
     public BaseConnection() {}
     public BaseConnection(Connector inConnector, Connector outConnector) {
         this.inConnector = inConnector;
@@ -45,6 +47,11 @@ public class BaseConnection implements QGraphicsItem {
         return outConnector;
     }
 
+    public void setBold(boolean bold) {
+        isBold = bold;
+        update();
+    }
+
     @Override
     public QRectF boundingRect() {
         QRectF rect = new QRectF(this.mapFromScene(inConnector.pos()), this.mapFromScene(outConnector.pos()));
@@ -54,10 +61,10 @@ public class BaseConnection implements QGraphicsItem {
 
     @Override
     public void paint(QPainter qPainter, QStyleOptionGraphicsItem qStyleOptionGraphicsItem, QWidget qWidget) {
-        qPainter.drawRect(boundingRect());
         qPainter.setRenderHints(new QPainter.RenderHints(QPainter.RenderHint.Antialiasing, QPainter.RenderHint.TextAntialiasing));
         QPen pen = new QPen(new QColor(Qt.GlobalColor.blue));
-        pen.setWidth(5);
+        if (isBold) pen.setWidth(10);
+        else pen.setWidth(5);
         qPainter.setPen(pen);
         qPainter.drawLine(mapFromScene(inConnector.pos()), mapFromScene(outConnector.pos()));
     }
