@@ -1,6 +1,9 @@
 package ui.graph.symbols;
 
+import enums.ConnectableDirectionEnum;
 import enums.ConnectorTypeEnum;
+import enums.SymbolEnum;
+import interfaces.symbols.IInConnector;
 import io.qt.core.QPointF;
 import io.qt.core.QSizeF;
 import io.qt.core.Qt;
@@ -9,22 +12,31 @@ import io.qt.gui.QPainter;
 import io.qt.gui.QPen;
 import io.qt.widgets.QStyleOptionGraphicsItem;
 import io.qt.widgets.QWidget;
-import ui.graph.connections.BaseConnection;
+import ui.graph.symbols.base.BaseSymbol;
+import ui.graph.symbols.connectors.Connector;
 
-public class EndSymbol extends BaseSymbol {
-    private BaseConnection inConnection;
+public class EndSymbol extends BaseSymbol implements IInConnector {
+    private Connector inConnector;
 
-    public EndSymbol(QPointF position, QSizeF size, BaseConnection inConnection) {
-        this.setPos(this.mapFromScene(position));
+    public EndSymbol(QPointF pos, QSizeF size) {
+        this.text = SymbolEnum.End.name();
+        this.setPos(pos);
         this.size = size;
-        this.text = "End";
-        this.inConnection = inConnection;
-        this.inConnection.setOutSymbol(this);
+
+        this.inConnector = new Connector(this, new QPointF(size.width() / 2, 0), ConnectorTypeEnum.In,
+                ConnectableDirectionEnum.Top);
+
+        ConnectSignals();
     }
 
-    public void setInConnection(BaseConnection inConnection) {
-        this.inConnection = inConnection;
-        this.inConnection.setOutSymbol(this);
+    @Override
+    public Connector getInConnector() {
+        return inConnector;
+    }
+
+    @Override
+    public void UpdatePosition() {
+        if (inConnector != null) inConnector.SymbolPositionChanged();
     }
 
     @Override
@@ -35,11 +47,5 @@ public class EndSymbol extends BaseSymbol {
         qPainter.setPen(pen);
         qPainter.drawEllipse(boundingRect());
         qPainter.drawText(boundingRect(), Qt.AlignmentFlag.AlignCenter.value(), text);
-    }
-
-    @Override
-    protected void UpdatePosition() {
-        if (inConnection != null)
-            inConnection.update();
     }
 }

@@ -9,7 +9,7 @@ well maintained anymore.
 would like to move to something more modern.
 <br/>But here lies the problem: There is no viable alternative, everything is either horribly outdated, never got to
 a usable state or is in another way inappropriate for our use case.
-<br/>This is the purpose of Reaper: Providing a modern and well maintained alternative to Raptor, so students at least
+<br/>This is the purpose of Reaper: Providing a modern, cross-platform and well maintained alternative to Raptor, so students at least
 have a choice.
 
 ## Technologies

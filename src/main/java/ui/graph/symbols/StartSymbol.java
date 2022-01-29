@@ -1,6 +1,9 @@
 package ui.graph.symbols;
 
+import enums.ConnectableDirectionEnum;
 import enums.ConnectorTypeEnum;
+import enums.SymbolEnum;
+import interfaces.symbols.ITrueOutConnector;
 import io.qt.core.QPointF;
 import io.qt.core.QSizeF;
 import io.qt.core.Qt;
@@ -9,23 +12,31 @@ import io.qt.gui.QPainter;
 import io.qt.gui.QPen;
 import io.qt.widgets.QStyleOptionGraphicsItem;
 import io.qt.widgets.QWidget;
-import ui.graph.connections.BaseConnection;
+import ui.graph.symbols.base.BaseSymbol;
+import ui.graph.symbols.connectors.Connector;
 
-public class StartSymbol extends BaseSymbol {
-    private BaseConnection outConnection;
+public class StartSymbol extends BaseSymbol implements ITrueOutConnector {
+    Connector trueOutConnector;
 
-    public StartSymbol(QPointF position, QSizeF size, BaseConnection outConnection) {
-        this.setPos(this.mapFromScene(position));
+    public StartSymbol(QPointF pos, QSizeF size) {
+        this.text = SymbolEnum.Start.name();
+        this.setPos(pos);
         this.size = size;
-        this.text = "Start";
-        this.outConnection = outConnection;
-        this.outConnection.setInSymbol(this);
+
+        trueOutConnector = new Connector(this, new QPointF(this.size.width() / 2, this.size.height()),
+                ConnectorTypeEnum.Out, ConnectableDirectionEnum.Bottom);
+
+        ConnectSignals();
     }
 
     @Override
-    protected void UpdatePosition() {
-        if (outConnection != null)
-            outConnection.UpdatePos();
+    public Connector getTrueOutConnector() {
+        return trueOutConnector;
+    }
+
+    @Override
+    public void UpdatePosition() {
+        if (trueOutConnector != null) trueOutConnector.SymbolPositionChanged();
     }
 
     @Override

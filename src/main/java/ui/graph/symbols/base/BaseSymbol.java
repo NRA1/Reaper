@@ -1,5 +1,6 @@
-package ui.graph.symbols;
+package ui.graph.symbols.base;
 
+import ui.graph.symbols.connectors.ConnectorParentItem;
 import io.qt.core.*;
 import io.qt.gui.QColor;
 import io.qt.gui.QPainter;
@@ -8,9 +9,10 @@ import io.qt.widgets.QGraphicsItem;
 import io.qt.widgets.QStyleOptionGraphicsItem;
 import io.qt.widgets.QWidget;
 
-public class BaseSymbol implements QGraphicsItem {
+public class BaseSymbol extends ConnectorParentItem implements QGraphicsItem {
     public QSizeF size;
     protected String text;
+
 
     public BaseSymbol(QPointF position, QSizeF size, String text) {
         this.setPos(this.mapFromScene(position));
@@ -20,6 +22,7 @@ public class BaseSymbol implements QGraphicsItem {
                 GraphicsItemFlag.ItemSendsGeometryChanges);
 
         UpdatePosition();
+
     }
 
     public BaseSymbol() {
@@ -27,11 +30,20 @@ public class BaseSymbol implements QGraphicsItem {
                 GraphicsItemFlag.ItemSendsGeometryChanges);
     }
 
+    public void ConnectSignals() {
+        UpdatePosition.connect(this::PrintTest);
+    }
+
     protected Object itemChange(GraphicsItemChange change, Object value) {
         if (change == GraphicsItemChange.ItemPositionChange) {
             UpdatePosition();
+            UpdatePosition.emit();
         }
         return value;
+    }
+
+    public void PrintTest() {
+        System.out.println("Test");
     }
 
     protected void UpdatePosition() { }
@@ -53,5 +65,10 @@ public class BaseSymbol implements QGraphicsItem {
 
     protected void SetDefaultQPainterSettings(QPainter qPainter) {
         qPainter.setRenderHints(new QPainter.RenderHints(QPainter.RenderHint.Antialiasing, QPainter.RenderHint.TextAntialiasing));
+    }
+
+
+    public QPointF scenePosition() {
+        return scenePos();
     }
 }

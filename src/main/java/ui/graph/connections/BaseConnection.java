@@ -10,56 +10,55 @@ import io.qt.gui.QPen;
 import io.qt.widgets.QGraphicsItem;
 import io.qt.widgets.QStyleOptionGraphicsItem;
 import io.qt.widgets.QWidget;
-import ui.graph.symbols.BaseSymbol;
+import ui.graph.symbols.base.BaseSymbol;
+import ui.graph.symbols.connectors.Connector;
 
 public class BaseConnection implements QGraphicsItem {
-    private BaseSymbol inSymbol;
-    private BaseSymbol outSymbol;
+    private Connector inConnector;
+    private Connector outConnector;
 
     public BaseConnection() {}
-    public BaseConnection(BaseSymbol inSymbol, BaseSymbol outSymbol) {
-        this.inSymbol = inSymbol;
-        this.outSymbol = outSymbol;
+    public BaseConnection(Connector inConnector, Connector outConnector) {
+        this.inConnector = inConnector;
+        this.outConnector = outConnector;
     }
 
-    public BaseSymbol getInSymbol() {
-        return inSymbol;
-    }
-
-    public void setInSymbol(BaseSymbol inSymbol) {
-        this.inSymbol = inSymbol;
+    public void setInConnector(Connector inConnector) {
+        this.inConnector = inConnector;
         UpdatePos();
     }
 
-    public BaseSymbol getOutSymbol() {
-        return outSymbol;
+    public Connector getInConnector() {
+        return inConnector;
     }
 
     public void UpdatePos() {
-        this.setPos(inSymbol.scenePos().add(new QPointF(this.inSymbol.size.width() / 2,
-                this.inSymbol.size.height())));
+        this.setPos(inConnector.pos());
     }
 
-    public void setOutSymbol(BaseSymbol outSymbol) {
-        this.outSymbol = outSymbol;
+    public void setOutConnector(Connector outConnector) {
+        this.outConnector = outConnector;
         update();
+    }
+
+    public Connector getOutConnector() {
+        return outConnector;
     }
 
     @Override
     public QRectF boundingRect() {
-        QRectF rect = new QRectF(this.mapFromScene(inSymbol.scenePos()), this.mapFromScene(outSymbol.scenePos()
-                .subtract(new QPointF(0, outSymbol.size.height()))));
+        QRectF rect = new QRectF(this.mapFromScene(inConnector.pos()), this.mapFromScene(outConnector.pos()));
         return new QRectF(0, 0, rect.width(), rect.height()).normalized().marginsAdded(
                 new QMarginsF(10, 10, 10, 10));
     }
 
     @Override
     public void paint(QPainter qPainter, QStyleOptionGraphicsItem qStyleOptionGraphicsItem, QWidget qWidget) {
+        qPainter.drawRect(boundingRect());
         qPainter.setRenderHints(new QPainter.RenderHints(QPainter.RenderHint.Antialiasing, QPainter.RenderHint.TextAntialiasing));
         QPen pen = new QPen(new QColor(Qt.GlobalColor.blue));
         pen.setWidth(5);
         qPainter.setPen(pen);
-        qPainter.drawLine(new QPointF(0, 0), this.mapFromScene(new QPointF(outSymbol.scenePos().x()
-                + outSymbol.size.width() / 2, outSymbol.scenePos().y())));
+        qPainter.drawLine(mapFromScene(inConnector.pos()), mapFromScene(outConnector.pos()));
     }
 }

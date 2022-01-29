@@ -1,7 +1,10 @@
 package ui.graph.symbols;
 
+import enums.ConnectableDirectionEnum;
 import enums.ConnectorTypeEnum;
 import enums.SymbolEnum;
+import interfaces.symbols.IInConnector;
+import interfaces.symbols.ITrueOutConnector;
 import io.qt.core.QPointF;
 import io.qt.core.QSizeF;
 import io.qt.core.Qt;
@@ -11,40 +14,48 @@ import io.qt.gui.QPen;
 import io.qt.gui.QPolygonF;
 import io.qt.widgets.QStyleOptionGraphicsItem;
 import io.qt.widgets.QWidget;
-import ui.graph.connections.BaseConnection;
+import ui.graph.symbols.base.BaseSymbol;
+import ui.graph.symbols.connectors.Connector;
 
-public class OutputSymbol extends PlacableSymbol {
+public class OutputSymbol extends BaseSymbol implements IInConnector, ITrueOutConnector {
+    private Connector inConnector;
+    public Connector trueOutConnector;
+    private QPolygonF polygon;
 
-
-    public static QPolygonF polygon;
-
-    public OutputSymbol(QPointF position, QSizeF size, BaseConnection inConnection, BaseConnection outConnection) {
-        this.setPos(this.mapFromScene(position));
+    public OutputSymbol(QPointF pos, QSizeF size) {
+        this.setPos(pos);
         this.size = size;
-        this.text = SymbolEnum.Output.name();
+        this.text = SymbolEnum.Input.name();
+
+        this.inConnector = new Connector(this, new QPointF(size.width() / 2, 0), ConnectorTypeEnum.In,
+                ConnectableDirectionEnum.Top);
+        this.trueOutConnector = new Connector(this, new QPointF(size.width() / 2, size.height()),
+                ConnectorTypeEnum.Out, ConnectableDirectionEnum.Bottom);
+
+        ConnectSignals();
 
         polygon = new QPolygonF();
-        polygon.append(0, 0);
-        polygon.append(size.width() / 5 * 4, 0);
-        polygon.append(size.width(), size.height());
-        polygon.append(size.width() / 5, size.height());
-
-        setInConnection(inConnection);
-        this.setOutConnection(outConnection);
+        polygon.append(size.width() / 5, 0);
+        polygon.append(size.width(), 0);
+        polygon.append(size.width() / 5 * 4, size.height());
+        polygon.append(0, size.height());
     }
 
-    public OutputSymbol(QPointF position, QSizeF size) {
-        this.setPos(this.mapFromScene(position));
-        this.size = size;
-        this.text = SymbolEnum.Output.name();
-
-        polygon = new QPolygonF();
-        polygon.append(0, 0);
-        polygon.append(size.width() / 5 * 4, 0);
-        polygon.append(size.width(), size.height());
-        polygon.append(size.width() / 5, size.height());
+    @Override
+    public Connector getInConnector() {
+        return inConnector;
     }
 
+    @Override
+    public Connector getTrueOutConnector() {
+        return trueOutConnector;
+    }
+
+    @Override
+    public void UpdatePosition() {
+        if (inConnector != null) inConnector.SymbolPositionChanged();
+        if (trueOutConnector != null) trueOutConnector.SymbolPositionChanged();
+    }
 
     @Override
     public void paint(QPainter qPainter, QStyleOptionGraphicsItem qStyleOptionGraphicsItem, QWidget qWidget) {
