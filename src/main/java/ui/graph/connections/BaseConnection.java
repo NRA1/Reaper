@@ -1,17 +1,17 @@
 package ui.graph.connections;
 
+import enums.ConnectableDirectionEnum;
 import io.qt.core.QMarginsF;
 import io.qt.core.QPointF;
 import io.qt.core.QRectF;
 import io.qt.core.Qt;
-import io.qt.gui.QColor;
-import io.qt.gui.QPainter;
-import io.qt.gui.QPen;
+import io.qt.gui.*;
 import io.qt.widgets.QGraphicsItem;
 import io.qt.widgets.QStyleOptionGraphicsItem;
 import io.qt.widgets.QWidget;
 import ui.graph.symbols.base.BaseSymbol;
 import ui.graph.symbols.connectors.Connector;
+import ui.graph.symbols.connectors.MergeConnector;
 
 public class BaseConnection implements QGraphicsItem {
     private Connector inConnector;
@@ -19,10 +19,10 @@ public class BaseConnection implements QGraphicsItem {
 
     private boolean isBold = false;
 
-    public BaseConnection() {}
-    public BaseConnection(Connector inConnector, Connector outConnector) {
-        this.inConnector = inConnector;
-        this.outConnector = outConnector;
+    private QPainterPath path;
+
+    public BaseConnection() {
+        path = new QPainterPath();
     }
 
     public void setInConnector(Connector inConnector) {
@@ -36,11 +36,19 @@ public class BaseConnection implements QGraphicsItem {
 
     public void UpdatePos() {
         this.setPos(inConnector.pos());
+        UpdateShape();
+    }
+
+    public void UpdateOutPos() {
+        UpdateShape();
+        update();
+        if(inConnector.getParent() instanceof MergeConnector)
+            ((MergeConnector) inConnector.getParent()).UpdatePosition();
     }
 
     public void setOutConnector(Connector outConnector) {
         this.outConnector = outConnector;
-        update();
+        UpdateOutPos();
     }
 
     public Connector getOutConnector() {
@@ -52,11 +60,33 @@ public class BaseConnection implements QGraphicsItem {
         update();
     }
 
+    private void UpdateShape() {
+        if (inConnector == null || outConnector == null) return;
+        QPointF p1 = mapFromScene(inConnector.pos());
+        QPointF p5 = mapFromScene(outConnector.pos());
+        QPointF p2 = null;
+        if(inConnector.connectableDirection == ConnectableDirectionEnum.Left)
+            p2 = p5.x() < p1.y() - 30 ? new QPointF(p5.x(), p1.y()) : new QPointF(p1.x() - 30, p1.y());
+        else if(inConnector.connectableDirection == ConnectableDirectionEnum.Right)
+            p2 = p5.x() > p1.x() + 30 ? new QPointF(p5.x(), p1.y()) : new QPointF(p1.x() + 30, p1.y());
+        else
+            p2 = p1;
+        QPointF p3 = outConnector.connection().outConnector.getParent() instanceof MergeConnector
+                ? new QPointF(p2.x(), p5.y())
+                : new QPointF(p2.x(), (p5.y() - p1.y()) / 2);
+        QPointF p4 = new QPointF(p5.x(), p3.y());
+        QPainterPath path = new QPainterPath();
+        path.moveTo(p1);
+        path.lineTo(p2);
+        path.lineTo(p3);
+        path.lineTo(p4);
+        path.lineTo(p5);
+        this.path = path;
+    }
+
     @Override
     public QRectF boundingRect() {
-        QRectF rect = new QRectF(this.mapFromScene(inConnector.pos()), this.mapFromScene(outConnector.pos()));
-        return new QRectF(0, 0, rect.width(), rect.height()).normalized().marginsAdded(
-                new QMarginsF(10, 10, 10, 10));
+        return path.boundingRect().normalized().marginsAdded(new QMarginsF(10, 10, 10, 10));
     }
 
     @Override
@@ -66,6 +96,6 @@ public class BaseConnection implements QGraphicsItem {
         if (isBold) pen.setWidth(10);
         else pen.setWidth(5);
         qPainter.setPen(pen);
-        qPainter.drawLine(mapFromScene(inConnector.pos()), mapFromScene(outConnector.pos()));
+        qPainter.drawPath(path);
     }
 }

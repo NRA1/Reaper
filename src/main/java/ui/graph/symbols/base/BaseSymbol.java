@@ -31,7 +31,7 @@ public class BaseSymbol extends ConnectorParentItem implements QGraphicsItem {
     }
 
     public void ConnectSignals() {
-        UpdatePosition.connect(this::PrintTest);
+
     }
 
     protected Object itemChange(GraphicsItemChange change, Object value) {
@@ -40,10 +40,6 @@ public class BaseSymbol extends ConnectorParentItem implements QGraphicsItem {
             UpdatePosition.emit();
         }
         return value;
-    }
-
-    public void PrintTest() {
-        System.out.println("Test");
     }
 
     protected void UpdatePosition() { }

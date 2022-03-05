@@ -1,8 +1,6 @@
 package ui.graph;
 
 import enums.SymbolEnum;
-import interfaces.symbols.IContinueConnector;
-import interfaces.symbols.IFalseOutConnector;
 import interfaces.symbols.IInConnector;
 import interfaces.symbols.ITrueOutConnector;
 import io.qt.core.QPointF;
@@ -91,6 +89,15 @@ public class Scene extends QGraphicsScene {
     }
 
     @Override
+    protected void dragLeaveEvent(QGraphicsSceneDragDropEvent event) {
+        if (event.mimeData().hasFormat(SymbolEnum.class.getName())) {
+            this.removeItem(droppingSymbol);
+            droppingSymbol = null;
+        }
+        super.dragLeaveEvent(event);
+    }
+
+    @Override
     protected void dropEvent(QGraphicsSceneDragDropEvent event) {
         if (boldConnection != null) {
             boldConnection.setBold(false);
@@ -128,8 +135,10 @@ public class Scene extends QGraphicsScene {
             } else {
                 if (droppingSymbol instanceof ITrueOutConnector)
                     ((ITrueOutConnector) droppingSymbol).getTrueOutConnector().setConnection(outConnection);
+
                 var inConnection = new BaseConnection();
-                    prevInConnector.setConnection(inConnection);
+                prevInConnector.setConnection(inConnection);
+
                 if (droppingSymbol instanceof IInConnector)
                     ((IInConnector) droppingSymbol).getInConnector().setConnection(inConnection);
                 if (droppingSymbol instanceof LoopSymbol) {
@@ -142,6 +151,14 @@ public class Scene extends QGraphicsScene {
 
                 this.addItem(inConnection);
             }
+
+            if(droppingSymbol instanceof IInConnector) {
+                if(((IInConnector)droppingSymbol).getInConnector().connection().getInConnector().getParent() instanceof MergeConnector connector) {
+                    connector.ResubscribeToMoveEvents((BaseSymbol)outConnection.getOutConnector().getParent(), droppingSymbol);
+                }
+
+            }
+
             this.droppingSymbol.setOpacity(1);
 
         } else {

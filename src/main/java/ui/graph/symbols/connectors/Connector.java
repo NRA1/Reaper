@@ -28,7 +28,7 @@ public class Connector {
     public void SymbolPositionChanged() {
         if (connection != null) {
             if (type == ConnectorTypeEnum.Out) connection.UpdatePos();
-            else connection.update();
+            else connection.UpdateOutPos();
         }
     }
 
