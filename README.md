@@ -1,6 +1,8 @@
 # Reaper
 Flowchart designer and interpreter.
 
+# The repository is archived. I started the project, because I thought there is no good Raptor alternative. Apparantly there is: Flowgorithm. So this project is now useless.
+
 ## Motive
 On our high school (and many others in my country) we are taught fundamentals of programmatic thinking using Raptor
 flowchart interpreter. But Raptor is ugly, buggy, only supports Windows, it's interface is for the 90s, and it's not
